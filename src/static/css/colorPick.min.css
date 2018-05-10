@@ -1,0 +1,38 @@
+#colorPick * {
+	-webkit-transition: all linear .2s;
+	-moz-transition: all linear .2s;
+	-ms-transition: all linear .2s;
+	-o-transition: all linear .2s;
+	transition: all linear .2s;
+}
+
+#colorPick {
+	background: rgba(255, 255, 255, 0.85);
+	-webkit-backdrop-filter: blur(15px);
+	position: absolute;
+	border-radius: 5px;
+	box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.2);
+	padding: 15px;
+	font-family: "Open Sans", sans-serif;
+	width: 140px;
+}
+
+#colorPick span {
+	font-size: 9pt;
+	text-transform: uppercase;
+	font-weight: bold;
+	color: #bbb;
+	margin-bottom: 5px;
+	display: block;
+	clear: both;
+}
+
+.colorPickButton {
+	border-radius: 5px;
+	width: 20px;
+	height: 20px;
+	margin: 0px 3px;
+	cursor: pointer;
+	display: inline-block;
+	border: thin solid #eee;
+}

@@ -1,0 +1,383 @@
+
+{% extends "base.html" %}
+ {% load staticfiles %}
+{% block head_css %}
+
+ <link href="{% static 'css/jqx.base.css' %}" rel="stylesheet" type="text/css" />
+  <!-- <link href="{% static 'css/jqx.artic.css' %}" rel="stylesheet" type="text/css" /> -->
+ <link href="{% static 'css/jqx.bootstrap.css' %}" rel="stylesheet" type="text/css" /> 
+ <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <style type="text/css">
+  .jqx-listitem-state-selected-bootstrap, .jqx-menu-item-selected-bootstrap, .jqx-tree-item-selected-bootstrap, .jqx-calendar-cell-selected-bootstrap, .jqx-grid-cell-selected-bootstrap, .jqx-menu-vertical-bootstrap .jqx-menu-item-top-selected-bootstrap, .jqx-grid-selectionarea-bootstrap {
+    color: #000 !important;
+    background-color: #fff !important;
+    border-color: #aaa !important;
+}
+
+    .spinner {
+            display: inline-block;
+            opacity: 0;
+            width: 0;
+            -webkit-transition: opacity 0.25s, width 0.25s;
+            -moz-transition: opacity 0.25s, width 0.25s;
+            -o-transition: opacity 0.25s, width 0.25s;
+            transition: opacity 0.25s, width 0.25s;
+        }
+
+        .has-spinner.active {
+            cursor: progress;
+        }
+
+            .has-spinner.active .spinner {
+                opacity: 1;
+                width: auto; /* This doesn't work, just fix for unkown width elements */
+            }
+
+        .has-spinner.btn.active .spinner {
+            width: 16px;
+        }
+    </style>
+
+{% endblock %}  
+
+{% block head_javascript %}
+
+
+   <script src="{% static 'js/Jqxwidgets/jqxcore.js' %}" type="text/javascript"></script>
+
+   
+    <script src="{% static 'js/Jqxwidgets/jqxbuttons.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/Jqxwidgets/jqxdata.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/Jqxwidgets/jqxgrid.js' %}" type="text/javascript"></script>
+     <script src="{% static 'js/Jqxwidgets/jqxgrid.selection.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/Jqxwidgets/jqxmenu.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/Jqxwidgets/jqxscrollbar.js' %}" type="text/javascript"></script>
+
+
+    <script type="text/javascript" src="{% static 'js/Jqxwidgets/jqxscrollbar.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/Jqxwidgets/jqxlistbox.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/Jqxwidgets/jqxdropdownlist.js' %}"></script>
+
+
+    <script type="text/javascript" src="{% static 'js/Jqxwidgets/jqxgrid.pager.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/Jqxwidgets/jqxgrid.sort.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/Jqxwidgets/jqxgrid.filter.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/Jqxwidgets/jqxcheckbox.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/Jqxwidgets/jqxgrid.edit.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/Jqxwidgets/jqxgrid.columnsresize.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'js/Jqxwidgets/jqxpanel.js' %}"></script>
+<script type='text/javascript'>
+
+$(document).ready(function() {
+ 
+  
+  var editedRows = new Array();
+  var columnsData = [];
+  var defaultRow = {};
+    var source =
+    {
+        updaterow: function (rowid, rowdata, commit) {
+          // that function is called after each edit.
+
+          // var html = '';
+          // var rowindex = $("#jqxgrid").jqxGrid('getrowboundindexbyid', rowid);
+          // index = editedRows.map(function (e) { return e.index; }).indexOf(rowid)
+          // if (index != -1) {
+          //     editedRows[index] = { index: rowindex, data: rowdata }
+          // } else {
+          //     editedRows.push({ index: rowindex, data: rowdata });
+          // }
+          // if (editedRows.length > 0) {
+          //     $('#send').removeClass('disabled'); // Disables visually
+          //     $('#send').prop('disabled', false); // Disables visually + functionally
+          // }
+          commit(true);
+
+      },   
+    // async: false,
+    url:'/networks/getnetwork/',
+    datatype: "json",
+    sortcolumn: 'Smiles',
+    sortdirection: 'asc',
+    datafields: [
+            { name: 'Compound', type: 'string' },
+            { name: 'PubChem_CID', type: 'number' },
+            { name: 'Smiles', type: 'string' }
+        ],
+    };
+ 
+    var dataAdapter = new $.jqx.dataAdapter(source,
+    {
+
+      contentType: 'application/json; charset=utf-8',
+      loadServerData: function (serverdata, source, callback) {
+          $.ajax({
+              type: "POST",
+              contentType: "application/json; charset=utf-8",
+              // url: 'source.url',
+              url: source.url,
+              data: JSON.stringify({'id': '{{network.id}}'}),
+              dataType: "json",
+              success: function (data) {
+             
+              var columns = data['columns']
+
+              // for (var i = 0; i < columns.length; i++) {
+                 
+              //   if ($.inArray( columns[i],[ "Smiles", "PubChem_CID", "Compound", "Annotation" ]) == -1){
+              //        source.datafields.push({name: columns[i], type:'float' });
+              //        defaultRow[columns[i]] = 0
+              //   }
+              //   else{
+              //         if(columns[i] == "PubChem_CID"){
+              //           defaultRow[columns[i]] = 0
+              //         }else{
+              //            defaultRow[columns[i]] = null
+              //         }
+                      
+              //   }
+
+              //     if (i == columns.length -1){
+              //       columnsData.push({ text: columns[i], datafield: columns[i]});
+              //     }else{
+              //       if (columns[i] == 'Smiles'){
+              //         columnsData.push({ text: columns[i], datafield: columns[i], width: 600 ,
+              //         validation: function (cell, value) {
+                          
+              //             if (value == "" || value == null) {
+              //                   $('#visualize').addClass('disabled'); // Disables visually
+              //                   $('#visualize').prop('disabled', true);
+              //                   return { result: false, message: "Smiles cannot be empty" };
+              //             }
+              //             $('#visualize').removeClass('disabled'); // Disables visually
+              //             $('#visualize').prop('disabled', false);
+              //             return true;
+
+              //         }    
+
+
+
+              //         });
+              //       }else if(columns[i] == 'PubChem_CID'){
+
+              //         columnsData.push({ text: 'PubChem ID', datafield: columns[i], width: 100, cellsrenderer: cellsrenderer});
+              //       }else{
+              //         columnsData.push({ text: columns[i], datafield: columns[i], width: 100 
+              //         //  validation: function (cell, value) {
+   
+              //         //     return false;
+              //         // }    
+              //         });
+              //       }
+                    
+              //     }
+                 
+                  
+
+                  
+              // }
+
+             
+                 callback({ records: $.parseJSON(data['data']) });
+              }
+          });
+      },
+
+    });
+  
+  // for row in $("#jqxgrid").jqxGrid('getrows'){
+  //   console.log(row)
+  // } 
+  $('#save').click(function (e) {
+        e.preventDefault();
+        $('#save').toggleClass('active');
+        update_smiles()
+        return false;
+  })    
+    $("#jqxgrid").jqxGrid(
+    {
+        width: '100%',
+        height:'550px',
+
+        source: dataAdapter,
+        columnsresize: true,
+        autoshowfiltericon: false,
+        sortable: true,
+        autoheight:true,
+        selectionmode:'checkbox',
+        theme: 'bootstrap',
+        // editmode: 'click',
+        editable: true,
+
+
+        filterable: true,
+        pageable: true,
+        pagesizeoptions: ['25', '50', '100'],
+        ready: function () {
+            $("#jqxgrid").jqxGrid({ pagesize: 25 });
+            var rows = $("#jqxgrid").jqxGrid('getboundrows');
+
+            var output = [];
+            // rows.forEach(function(row) {
+                 
+            //      if(row['Smiles'] ) {
+            //           $('#jqxgrid').jqxGrid('selectrow', row['uid']);
+            //      }else{
+                      
+            //          $('#jqxgrid').jqxGrid('unselectrow', row['uid']);
+            //      }
+            // });
+            // $('#jqxgrid').jqxGrid('selectallrows');
+        },
+        enablebrowserselection: true,
+
+        columns:columnsData
+    });
+  // $("#jqxgrid").bind('cellendedit', function (event) {
+  //     if (event.args.datafield ==  'Smiles'){
+  //        if (event.args.value.replace(/\s/g, '').length > 0) {
+  //            $("#jqxgrid").jqxGrid('selectrow', event.args.rowindex);
+  //        }
+  //        else {
+  //            $("#jqxgrid").jqxGrid('unselectrow', event.args.rowindex);
+  //        }
+  //     }
+
+  // });
+    // var cellClass = function(gridId, highlightClass) {
+    // highlightClass = highlightClass || 'default';
+    // return function(row, columnfield, value) {
+    //     return hasEmptyCell(gridId, row) ? highlightClass : '';
+    //     // where hasEmptyCell is a function that checks if a row has an empty cell
+    // };
+    // };
+    $("#addrowbutton").on('click', function () {
+      var commit = $('#jqxgrid').jqxGrid('addrow', null, defaultRow);
+      var rows = $('#jqxgrid').jqxGrid('getrows');
+      // $('#jqxgrid').jqxGrid('selectrow',rows.length-1 );
+      // var rows = $("#jqxgrid").jqxGrid('getrows');
+      // var boundindex = $('#jqxgrid').jqxGrid('getrowboundindex', rows.length-1);
+      // $("#jqxgrid").jqxGrid('selectrow', boundindex);
+      // $("#jqxgrid").jqxGrid('ensurerowvisible', boundindex);
+    });
+          // function to render links for certain columns
+    // var cellsrenderer = function (row, column, value,defaultHtml) {
+    //       var href = '';
+    //        if (column == 'PubChem_CID'){
+    //          href = "https://pubchem.ncbi.nlm.nih.gov/compound/" + value;
+    //          return '<div style="padding: 5px;"><a target= "_blank" href="' + href + '">' + value + '</a></div>'; 
+    //        }
+
+    //       return defaultHtml;    
+    // }
+    $("#visualize").on('click', function () {
+          visualize()
+    });
+    
+    function visualize(){
+
+      var selectedRowData
+      var selectedRowsData = new Array();
+      var selectedIndexes = $('#jqxgrid').jqxGrid('getselectedrowindexes');
+      var rows = $('#jqxgrid').jqxGrid('getrows');
+
+      if (selectedIndexes.length >= 10){
+
+
+          // if (selectedIndexes.length  ==  rows.length)
+          // {
+          //     // update_smiles(rows)
+              
+          // }else if (selectedIndexes.length == 0){
+
+          //   alert('no data selected')
+          // }else{
+                        // returns the selected row's data           
+            for(rowIndex in selectedIndexes){
+
+              selectedRowData = $('#jqxgrid').jqxGrid('getrowdata', selectedIndexes[rowIndex]);
+
+              selectedRowsData.push(selectedRowData)
+            }
+             update_smiles(selectedRowsData)
+          // }  
+
+
+      }else{
+        alert('you should select atleast 10 compounds')
+
+
+      }
+  }
+
+    function update_smiles(rows) {
+         $("#visualize").toggleClass('active');
+        $.ajax({
+          type: "POST",
+          url: "/networks/updatenetwork/",
+          data: JSON.stringify({'data':rows,'activity':$("#activity").val()}),
+          dataType: "json",
+          success: function (data) {
+               if (data.update == 'success'){
+                  window.location="{% url 'network_view' network.id %}";
+               }else{
+                   // $('#visualize').removeClass('disabled'); // Disables visually
+                   // $('#visualize').prop('disabled', false);
+                   $("#visualize").toggleClass('active');
+                    alert('Something went wrong! Please make sure the added smiles are correct')
+               }
+               // 
+          }
+        });
+
+
+    }
+
+
+} );
+</script>
+{% endblock %}
+{% block content %}
+
+
+
+ 
+        
+        <div class="row featurette">
+        <div class="col-md-12">
+          <h2  class="featurette-heading"><span id='dataPreview'>Data Preview</span> <!-- <span class="text-muted">It'll blow your mind.</span> --></h2>
+<!--           <p class="lead">
+            
+</p> -->
+        </div>
+
+      </div>
+      <div id="jqxgrid"></div>
+        
+
+        <div id="eventslog" style="margin-top:10px;">
+            <div  class='input-group pull-left'>
+                <!-- a href="{% url 'project_visualize' project.id %}" class="btn btn-info" role="button">Visualize</a> -->
+
+              <input class="btn btn-default " style='margin-top:0px;' value="Add Compounds" id="addrowbutton" type="button" />
+            </div>
+                   
+            <div class='form-inline pull-right'  >
+               <div class="form-group">           
+              <button id="visualize"  class="btn btn-primary has-spinner" value="{% url 'network' network.id %}">
+                  <span class="spinner"><i class="fa fa-refresh fa-spin fa fa-fw"></i></span>
+                  Visualize
+              </button>     
+
+                </div>   
+            </div>
+            
+        </div>
+
+      
+        
+ 
+
+
+{% endblock content %}

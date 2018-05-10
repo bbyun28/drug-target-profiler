@@ -1,0 +1,494 @@
+
+{% extends "base.html" %}
+{% block head_css %}
+
+  <style>
+
+
+    .wrap-outer {
+        margin-top:-40px;;
+    }
+    .wrap-inner {
+        padding-top:40px;;
+    }
+    body { position: relative}
+
+    .nav .nav {
+    display: none;
+    }
+
+    .nav .active .nav {
+    display: block;
+    }
+
+    .nav .nav a {
+    font-weight: normal;
+    font-size: .85em;
+    }
+
+    .nav .nav span {
+    margin: 0 5px 0 2px;
+    }
+
+    .nav .nav .active a,
+    .nav .nav .active:hover a,
+    .nav .nav .active:focus a {
+    font-weight: bold;
+    padding-left: 30px;
+    border-left: 5px solid black;
+    }
+
+    .nav .nav .active span,
+    .nav .nav .active:hover span,
+    .nav .nav .active:focus span {
+    display: none;
+    }
+
+    #help .well {
+        font-family: Courier;
+        font-size: 1.2em;
+    }
+
+ 
+
+  .affix {
+      top: 20px;
+  }
+  div.col-sm-9 div {
+      height: 250px;
+      font-size: 28px;
+  }
+    .thumbCaption{
+
+    font-size: 12px;
+    }
+    .text-center{
+        
+        font-style: italic;
+    }
+
+  p {
+    font-size: 17px;
+    text-align: justify;
+  }
+.container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: 0;
+    margin-left: 0;
+}
+
+  </style>
+  <link href="//cdn.rawgit.com/noelboss/featherlight/1.7.0/release/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+{% endblock %}
+{% block head_javascript %}
+
+{% endblock %}
+{% block content %}
+
+  <div class="row">
+  <div class="col-sm-3" id="myScrollspy">
+  <ul class="nav hidden-xs hidden-sm affix" data-spy="affix" data-offset-top="200">
+    <li><a href="#about">About</a></li>
+    <li><a href="#browser">Browser requirements</a></li>
+    <li><a href="#ui">User Information</a></li>
+    <li><a href="#search">Search data</a> </li>
+    <li><a href="#ud">Upload Data</a></li>
+    <li><a href="#customize">Customize visualization</a>
+        <ul class="nav">
+                <li><a href="#zoom">Zoom</a></li>
+                <li><a href="#is">Interaction strength</a></li>
+                 <li><a href="#view">Export</a></li>
+                <li><a href="#tc">Target class</a></li>
+                <li><a href="#cp">Clinical phase</a></li>
+                <li><a href="#bt">Bioactivity type</a></li>
+                <li><a href="#mt">Mutated target </a></li>
+                <li><a href="#no">Network orientation </a></li>
+                
+         
+                
+        </ul>
+
+    </li>
+   
+    <li><a href="#pn">Protein nodes</a></li>
+    <li><a href="#cn">Compound nodes</a></li>
+  </ul>
+    </div>
+    <div class="col-md-9">
+          <div class="wrap-outer">
+      <section id="about"><div class="wrap-inner">
+
+    <h1 style="margin-top:0">About</h1>
+    <p>
+  <b>Drug Target Profiler</b>(DTP) is an interactive web-application for drug-target interaction network visualization, implemented for guiding drug repurposing and drug mode-of-action studies. The user-specified network is constructed based on integrated bioactivity data, namely dose-response measurements (IC50, EC50, XC50, AC50, Kd, Ki, and Potency).  After entering the names of compounds or proteins of interest (both wildtype and mutant targets), DTP generates an interactive network layout with multiple visualization options for the user. A combined network visualization can be made for a maximum of 10 search entries. Users may also upload their own interaction data and make customized visualizations for compounds and targets beyond those that are available in the DTP database. Figure 1 shows the home page of DTP, where a list of compounds and genes names (in comma separated format) are entered in search box to construct compound target network visualization.
+
+    </p>
+
+   
+    </p></div></section></div>
+    <div class="wrap-outer">
+      <section id="browser"><div class="wrap-inner">
+
+    <h1 style="margin-top:0">Browser requirements</h1>
+    <p>
+DTP has been checked for compatibility with standard modern browsers (Mozilla Firefox, Google chrome and Safari). 
+    </p>
+
+   
+    </p></div></section></div>
+
+    <div class="wrap-outer">
+    <section id="ui">
+    <div class="wrap-inner">
+    <h1>User Information</h1>
+        
+
+        
+        
+
+                <p>DTP can be directly accessed without any user login, registration, or providing any email address. Each user is provided an anonymous session where the user can search, filter or upload datasets. The data uploaded by each user is secure and private to the specific browser session, which expires at the specified session expiry time displayed at the top in a notification bar. User has the possibility to bookmark the web address, close the browser, and revisit the address to resume the analysis.
+                 </p>
+                 <p>
+                When using DTP, if you encounter any problem please contact the <a href='mailto:zia.rehman@helsinki.fi,zaid.alam@helsinki.fi,aleksandr.ianevski@helsinki.fi'>developers</a> 
+                 </p>       
+
+            
+
+
+    </div></section></div>
+        <div class="wrap-outer">
+    <section id="search">
+    <div class="wrap-inner">
+    <h1>Search Data</h1>
+              
+
+        <div class="row">
+            <div class="col-xs-6 col-md-6">
+
+               <p>
+                     Users can get network visualization after searching compounds or proteins. Compounds can be searched using compound names or synonyms (e.g. <b>gefitinib</b>), standard inchiKeys (e.g. <b>XGALLCVXEZPNRQ-UHFFFAOYSA-N</b>).  Whereas Proteins can be searched using gene names (e.g. <b>ABL1</b>) or UniProt IDs (e.g. <b>P00519</b>). Mutated targets can also be searched using following syntax: <b>ABL1(T315I)</b>.
+                </p>
+                  <p>
+                    Search entries will be queried to our database which contains manually curated data comprising of 937,269 <b>compounds</b>; 5,077 <b>protein targets</b> (192 mutations); 44,29,858 <b>interactions</b> (dose response measurements). 
+                 </p>
+
+                <p>Lets enter Gefitinib, sunitinib, EGFR, ABL1, ADRA1A in search box and generate an initial optimal visualization by DTP (after clicking Submit button). As can be seen from Figure 2 that DTP has generated an initial optimal visualization which can further be modified as per user requirements. </p>
+
+     
+
+            </div>
+            <div class="col-xs-6 col-md-6">
+                  <p class="thumbCaption text-center" >Click to enlarge</p>
+                <a href="#" class="thumbnail" data-featherlight="/static/img/help/search.png">
+                    <img src="/static/img/help/search.png" alt="upload data-1">
+                </a>
+                <p class="thumbCaption"><b>Figure 1:</b> Compound target interactions visualization for Gefitinib, Sunitinib, EGFR, ABL1, ADRA1A.
+
+
+</p>
+            </div></div>
+
+
+                    <div class="row">
+            <div class="col-xs-6 col-md-6">
+
+               <p>
+                   As can be seen from Figure 2 that DTP has generated an initial optimal visualization which can further be modified as per user requirements.</p>
+
+     
+
+            </div>
+            <div class="col-xs-6 col-md-6">
+                  <p class="thumbCaption text-center" >Click to enlarge</p>
+                <a href="#" class="thumbnail" data-featherlight="/static/img/help/search_result.png">
+                    <img src="/static/img/help/search_result.png" alt="upload data-1">
+                </a>
+                <p class="thumbCaption"><b>Figure 2:</b> Compound target interactions visualization for Gefitinib, Sunitinib, EGFR, ABL1, ADRA1A.
+
+
+</p>
+            </div></div>           
+       
+
+    </div></section></div>
+        <div class="wrap-outer">
+    <section id="ud">
+    <div class="wrap-inner">
+    <h1>Upload Data</h1>
+        
+             <p>Incase if desired data is not present in database, users can upload excel file containing at least compound name, gene name and interaction strength (between 0-1). User may also fill in other columns such as protein family (default: other), bioactivity type (by default: unknown) & value, compound phase. Some of these columns may be automatically filled in, if relevant records found in the database.  After uploading file, users can see customize the network using options as described in section: ‘Customization of network visualization’
+
+
+                 </p>
+  
+    </div></section></div>
+
+
+
+
+
+
+        <div class="wrap-outer"><section id="customize"> <div class="wrap-inner">
+    <h1>Customize visualization</h1>
+             
+            
+
+     <p> This sections allows user to customize the layout, filtering, edit the colors of legends and nodes, , zoom and select interaction strength and allows the user to export the visualization as a <i>.png</i>  or <i>.csv</i>  <i>Share</i> the customizable visual workspace as a hyperlink.
+
+
+</p>
+
+                
+
+
+
+
+    </div></section></div> 
+
+
+        <div class="wrap-outer"><section id="zoom"> <div class="wrap-inner">
+    <h1>Zoom</h1>
+
+      <p><i>Zoom + :</i> The zoom in button facilitates the user to zoom into the main interface </p>
+      <p><i>Zoom – :</i> The zoom out button facilitates the user to zoom out the main interface</p>
+ 
+
+
+
+
+
+
+    </div></section></div> 
+        <div class="wrap-outer"><section id="is"> <div class="wrap-inner">
+    <h1>Interaction strength</h1>
+    
+                                <div class="row">
+            <div class="col-xs-6 col-md-6">
+
+<p>Network size can grown by increasing the threshold for interaction strength as shown in figure 8. With the increase in network size users might be able to see additional targets for compounds and additional compounds for targets. For display, we set upper limit on number of links i.e. 250. However users can have a look at increased data in tabular format by exporting data to excel.</p>
+
+                
+
+            </div>
+            <div class="col-xs-6 col-md-6">
+                  <p class="thumbCaption text-center" >Click to enlarge</p>
+                <a href="#" class="thumbnail" data-featherlight="/static/img/help/is.png">
+                    <img src="/static/img/help/is.png" alt="layout">
+                </a>
+                <p class="thumbCaption"><b>Figure 3:</b>:Change threshold for interaction strength</p>
+            </div></div>
+
+
+    </div></section></div> 
+        <div class="wrap-outer"><section id="view"> <div class="wrap-inner">
+    <h1><style type="text/css"></style></h1>
+                    <div class="row">
+            <div class="col-xs-6 col-md-6">
+<h1>Export</h1>
+ <p>Through the export option the user can download the visual worksapce as .png file or a .csv file.</p>
+
+           
+
+            </div>
+            <div class="col-xs-6 col-md-6">
+                  <p class="thumbCaption text-center" >Click to enlarge</p>
+                <a href="#" class="thumbnail" data-featherlight="/static/img/help/export.png">
+                    <img src="/static/img/help/export.png" alt="Views">
+                </a>
+                <p class="thumbCaption"><b>Figure 4:</b> Export the customised figure or tabular data
+
+</p>
+            </div></div>
+    </div></section></div> 
+           <div class="wrap-outer"><section id="tc"> <div class="wrap-inner">
+    <h1>Target class</h1>
+                           <div class="row">
+            <div class="col-xs-6 col-md-6">
+
+    <p>Target class(protiens) are divided into 7 families i.e. GPCR, Kinase, Nuclear receptor, Transporter, Enzyme, Ion channel and Epigenetic regulator. User can easily filter out unwanted protein families upon single mouse click on the family name in the legend. As can be seen in figure 4, Proteins from families: Other, Ion channel, GPCRs are filtered out by clicking at the legend. 
+
+
+</p>
+
+
+           
+
+            </div>
+            <div class="col-xs-6 col-md-6">
+                  <p class="thumbCaption text-center" >Click to enlarge</p>
+                <a href="#" class="thumbnail" data-featherlight="/static/img/help/tc_filter.png">
+                    <img src="/static/img/help/tc_filter.png" alt="Attributes">
+                </a>
+                <p class="thumbCaption"><b>Figure 5:</b> Filtering of Target class(protein families)</p>
+            </div></div>
+                                       <div class="row">
+            <div class="col-xs-6 col-md-6">
+
+    <p>Target class(protiem family) colours can be changed by clicking at the colour (and selecting new) on the left of family name legend. Opacity of the colour can be changed as can be seen on the right of colour palate. 
+
+
+</p>
+
+
+           
+
+            </div>
+            <div class="col-xs-6 col-md-6">
+                  <p class="thumbCaption text-center" >Click to enlarge</p>
+                <a href="#" class="thumbnail" data-featherlight="/static/img/help/tc_colour.png">
+                    <img src="/static/img/help/tc_colour.png" alt="Attributes">
+                </a>
+                <p class="thumbCaption"><b>Figure 6:</b> Colour change of Target class (protein families)</p>
+            </div></div>
+    </div></section></div> 
+
+           <div class="wrap-outer"><section id="cp"> <div class="wrap-inner">
+    <h1>Clinical phase</h1>
+                           <div class="row">
+            <div class="col-xs-6 col-md-6">
+
+    <p>Clinical phase is divided into 5 categories i.e. Preclinical (by default it is Off, but user can include it by clicking on legend).Phase I, Phase II, Phase III and Approved. Filtering can be applied by clicking on the any of the phase .Colours for any catergory can be changed by clicking at the colour (and selecting new) on the left of family name legend.
+
+
+</p>
+
+
+           
+
+            </div>
+            <div class="col-xs-6 col-md-6">
+                  <p class="thumbCaption text-center" >Click to enlarge</p>
+                <a href="#" class="thumbnail" data-featherlight="/static/img/help/cp.png">
+                    <img src="/static/img/help/cp.png" alt="Clinical phase">
+                </a>
+                <p class="thumbCaption"><b>Figure 8:</b> Filtering and colour change of Clinical phase</p>
+            </div></div>
+
+    </div></section></div> 
+
+
+
+
+       <div class="wrap-outer"><section id="bt"> <div class="wrap-inner">
+    <h1>Bioactivity types</h1>
+                        <div class="row">
+            <div class="col-xs-6 col-md-6">
+
+    <p>Colors for bioactivity types can be changed by clicking the color at the left of particular bioactivity legend. Bioactivity types can be filtered out by clicking at the bioactivity type legend.
+
+
+</p>
+
+
+           
+
+            </div>
+            <div class="col-xs-6 col-md-6">
+                  <p class="thumbCaption text-center" >Click to enlarge</p>
+                <a href="#" class="thumbnail" data-featherlight="/static/img/help/bt.png">
+                    <img src="/static/img/help/bt.png" alt="Bioactivity type">
+                </a>
+                <p class="thumbCaption"><b>Figure 9:</b> Filtering and colour change of Bioactivity type
+
+
+</p>
+            </div></div>
+    </div></section></div> 
+
+       <div class="wrap-outer"><section id="mt"> <div class="wrap-inner">
+    <h1>Mutated targets</h1>
+
+                        <div class="row">
+            <div class="col-xs-6 col-md-6">
+
+     <p>If user clicks on ‘Mutated target’ in legend section, only mutated targets will be left visible (All wild type proteins will be filtered out). Mutated targets are distinguished from wild type by dotted outline across protein node. Color for the outline of mutated proteins can also be changed.
+
+</p>
+
+
+           
+
+            </div>
+            <div class="col-xs-6 col-md-6">
+                  <p class="thumbCaption text-center" >Click to enlarge</p>
+                <a href="#" class="thumbnail" data-featherlight="/static/img/help/mt.png">
+                    <img src="/static/img/help/mt.png" alt="Mutated targets">
+                </a>
+                <p class="thumbCaption"><b>Figure 9:</b> Filtering and colour change of Mutated targets
+
+
+</p>
+            </div></div>
+    </div></section></div> 
+
+   <div class="wrap-outer"><section id="export"> <div class="wrap-inner">
+    <h1>Network orientation</h1>
+                <div class="row">
+            <div class="col-xs-6 col-md-6">
+   <p>After initial optimal placement of nodes, users can further reorder nodes by dragging the appropriated node(compound or target). Similarly legends can also be moved.
+
+
+
+</p>
+
+
+           
+
+            </div>
+            <div class="col-xs-6 col-md-6">
+                  <p class="thumbCaption text-center" >Click to enlarge</p>
+                <a href="#" class="thumbnail" data-featherlight="/static/img/help/no.png">
+                    <img src="/static/img/help/no.png" alt="Network orientation">
+                </a>
+                <p class="thumbCaption"><b>Figure 10:</b> Reorder nodes
+</p>
+            </div></div>
+ 
+    </div></section></div> 
+
+            <div class="wrap-outer">
+    <section id="pn">
+    <div class="wrap-inner">
+    <h1>Protein nodes</h1>
+        
+      <p>Upon clicking a protein target, the GUI shows the top-expressed cell lines across different datasets (such as CCLE, GDSC), 3D structure of the protein, protein-disease associations, and cross-links to ~20 public protein and genome databases (such as UniProt, PDB and Ensembl). </p>
+    
+
+            
+       
+
+    </div></section></div>
+
+      <div class="wrap-outer"><section id="cn"> <div class="wrap-inner">
+    <h1>Compound nodes</h1>
+    
+    <p>For any compound, the GUI shows the drug sensitivity scores for top-sensitive cell lines, drug indications and cross-links to ~15 compound databases (such as ChEMBL, PubChem, DrugBank, and PharmacoDB).</p>
+
+
+
+    </div></section></div>
+
+    
+
+ <!--    <p style="margin-bottom: 1500px"></p> -->
+    </div>
+  </div>
+  
+
+ 
+
+
+{% endblock content %}
+
+
+
+{% block js-foot %}
+<script>
+  $(document).ready(function() {
+      $('body').scrollspy({target: "#myScrollspy", offset: 250})
+ });
+</script> 
+<script src="//cdn.rawgit.com/noelboss/featherlight/1.7.0/release/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+{% endblock js-foot %} 

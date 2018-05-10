@@ -1,0 +1,252 @@
+
+{% extends "base.html" %}
+ {% load staticfiles %}
+{% block head_css %}
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.1/css/bootstrap-colorpicker.min.css" /> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/css/bootstrap-slider.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/dt/dt-1.10.11/datatables.min.css"/>
+ 
+
+  <link rel="stylesheet" href="/static/css/network.css" />
+  <link rel="stylesheet" href="/static/css/colorPick.min.css" />
+
+  <style type="text/css">
+
+
+.bottom_page_content_nav {
+    line-height: 0;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    overflow: visible;
+    position:fixed;
+    bottom:0; 
+/*    margin-left: 50%; */
+/*    width: 16.667%;*/
+/*    float: min-height: 1px;*/
+/*    padding-right: 15px;
+    left;padding-left: 15px;*/
+}
+
+.bottom_page_content_nav ul {
+    text-align: left;
+    float: right;
+    white-space: nowrap;
+}
+
+.bottom_page_content_nav ul li {
+    display: inline-block;
+}
+
+.bottom_page_content_nav ul li a {
+    height: 36px;
+    line-height: 31px;
+    padding-left: 9px;
+    padding-right: 9px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 13px;
+    display: block;
+    color: #4d4d4d;
+    border: 1px solid #e3e3e3;
+    background-color: rgba(230,230,230,1);
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-transition: all .05s ease-out .05s;
+    -moz-transition: all .05s ease-out .05s;
+    -o-transition: all .05s ease-out .05s;
+    -ms-transition: all .05s ease-out .05s;
+    transition: all .05s ease-out .05s;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+.well {
+    min-height: 20px;
+    padding: 8px;
+    color: #4d4d4d;
+    margin-bottom: 20px;
+    background-color: rgba(230,230,230,1);
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+}
+.row{
+margin-right: -15px; margin-left: -15px;
+ }
+
+.myChartDiv {
+  max-width: 100%;
+  max-height: 50%;
+}
+
+
+
+
+
+
+  </style>
+{% endblock %}
+
+
+{% block head_javascript %}
+
+{% endblock %}
+
+{% block content %}
+
+
+<div id='loader' style='display:none;' class="loading"><img src="/static/img/loader.gif"></div>
+	
+	<!-- Modal --> <div class="modal fade" id="myModal" role="dialog"><div class="modal-dialog" style="width:70%;"> 
+	<!-- Modal content--> <div class="modal-content"><div class="modal-header"> <button type="button" class="close" data-dismiss="modal">&times;</button> <div class="modal-title"> 
+													<h4 class="cent">Modal Header</h4></div></div><div class="modal-body">
+				<div role="tabpanel">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#structure" aria-controls="structure" role="tab" data-toggle="tab">Structure</a></li>
+                        <li role="presentation"><a href="#ccle" aria-controls="ccle" role="tab" data-toggle="tab">CCLE</a></li>
+                        <li role="presentation"><a href="#gdsc" aria-controls="gdsc" role="tab" data-toggle="tab">GCSC</a></li>
+                        <li role="presentation"><a href="#geneTech" aria-controls="geneTech" role="tab" data-toggle="tab">GeneTech</a></li>
+                        <li role="presentation"><a href="#cr" aria-controls="cr" role="tab" data-toggle="tab">Cross referencing</a></li>
+                        <li role="presentation"><a href="#da" aria-controls="da" role="tab" data-toggle="tab">Disease association</a></li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active " id="structure"><img id="imgModal" height="500" width="500" /></div>
+                        <div role="tabpanel" class="tab-pane myChartDiv" id="ccle"><canvas id='ccleCharts' height="50%" width="100%"></canvas></div>
+                        <div role="tabpanel" class="tab-pane myChartDiv" id="gdsc"><canvas id='gdscCharts' height="50%" width="100%"></canvas></div>
+                        <div role="tabpanel" class="tab-pane" id="geneTech"><canvas id='geneTechCharts' height="50%" width="100%"></canvas></div>
+                        <div role="tabpanel" class="tab-pane" id="cr"><table id='crf_info' class="display" width="100%" height='100%'></table></div>
+                        <div role="tabpanel" class="tab-pane" id="da"><table id='da_info' class="display" width="100%" height='100%'></table></div>
+                    </div>
+                </div>
+	</div>
+	</div>
+				    </div> </div> 
+					
+					
+		<!-- Modal --> <div class="modal fade" id="myModal2" role="dialog"><div class="modal-dialog " style="width:70%;"> 
+	<!-- Modal content--> <div class="modal-content"><div class="modal-header"> <button type="button" class="close" data-dismiss="modal">&times;</button> <div class="modal-title"> 
+													<h4 class="cent2">Modal Header</h4></div></div><div class="modal-body">
+				<div role="tabpanel">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#structure2" aria-controls="structure2" role="tab" data-toggle="tab">Compound structure</a>
+                        </li>
+                        <li role="presentation"><a href="#ccle2" aria-controls="ccle2" role="tab" data-toggle="tab">CCLE</a></li>
+                        <li role="presentation"><a href="#gdsc2" aria-controls="gdsc2" role="tab" data-toggle="tab">GDSC1000</a></li>
+                        <li role="presentation"><a href="#gcsi" aria-controls="gcsi" role="tab" data-toggle="tab">gCSI</a></li>
+                        <li role="presentation"><a href="#grey" aria-controls="grey" role="tab" data-toggle="tab">GRAY</a></li>
+                        <li role="presentation"><a href="#fimm" aria-controls="fimm" role="tab" data-toggle="tab">FIMM</a></li>
+                        <li role="presentation"><a href="#ctrp" aria-controls="ctrp" role="tab" data-toggle="tab">CTRPv2</a></li>
+                         <li role="presentation"><a href="#uhn" aria-controls="uhn" role="tab" data-toggle="tab">UHNBreast</a></li>
+                        <li role="presentation"><a href="#crf2" aria-controls="crf2" role="tab" data-toggle="tab">Cross referencing</a></li>
+                        <li role="presentation"><a href="#da2" aria-controls="da2" role="tab" data-toggle="tab">Clinical Info</a></li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane myChartDiv active" id="structure2"><img id="imgModal2" height="500" width="500" /></div>
+                        <div role="tabpanel" class="tab-pane myChartDiv" id="ccle2"><canvas id='ccle2Charts' height="50%" width="100%"></canvas></div>
+                        <div role="tabpanel" class="tab-pane myChartDiv" id="gdsc2"><canvas id='gdsc2Charts' height="50%" width="100%"></canvas></div>
+                        <div role="tabpanel" class="tab-pane myChartDiv" id="grey"><canvas id='greyCharts' height="50%" width="100%"></canvas></div>
+                         <div role="tabpanel" class="tab-pane myChartDiv" id="gcsi"><canvas id='gcsiCharts' height="50%" width="100%"></canvas></div>
+                          <div role="tabpanel" class="tab-pane myChartDiv" id="fimm"><canvas id='fimmCharts' height="50%" width="100%"></canvas></div>
+                           <div role="tabpanel" class="tab-pane myChartDiv" id="ctrp"><canvas id='ctrpCharts' height="50%" width="100%"></canvas></div>
+                            <div role="tabpanel" class="tab-pane myChartDiv" id="uhn"><canvas id='uhnCharts' height="50%" width="100%"></canvas></div>
+                             
+                        <div role="tabpanel" class="tab-pane" id="crf2"><table id='crf2_info' class="display" height="100%"></table></div>
+                        <div role="tabpanel" class="tab-pane" id="da2"><table id='da2_info' class="display" width="100%" height="100%"></table></div>
+                    </div>
+                </div>
+	</div>	
+	</div>
+	</div> </div>
+
+
+	<!-- Page Content -->
+	<div id="page-content-wrapper">
+	
+		<!-- Color selector -->
+		<a href="#" id="cp4">.</a><a href="#" id="cp5">.</a> <a href="#" id="cp6">.</a> 
+		<div id="colorPick" style="position:fixed !important;top: 24px; right: 200px;"><span>Choose color:</span><div class="colorPickButton" hexvalue="#016516" style="background:#016516"></div><div class="colorPickButton" hexvalue="#2F2F2F" style="background:#2F2F2F"></div><div class="colorPickButton" hexvalue="#7DE365" style="background:#7DE365"></div><div class="colorPickButton" hexvalue="#8D003C" style="background:#8D003C"></div><div class="colorPickButton" hexvalue="#001665" style="background:#001665"></div><div class="colorPickButton" hexvalue="#E53D02" style="background:#E53D02"></div><div class="colorPickButton" hexvalue="#00D2BF" style="background:#00D2BF"></div><div class="colorPickButton" hexvalue="#0145C7" style="background:#0145C7"></div><div class="colorPickButton" hexvalue="#E50514" style="background:#E50514"></div><div class="colorPickButton" hexvalue="#E67A0A" style="background:#E67A0A"></div><div class="colorPickButton" hexvalue="#8D3B25" style="background:#8D3B25"></div><div class="colorPickButton" hexvalue="#E50261" style="background:#E50261"></div><div class="colorPickButton" hexvalue="#049B49" style="background:#049B49"></div><div class="colorPickButton" hexvalue="#E6B40D" style="background:#E6B40D"></div><div class="colorPickButton" hexvalue="#646464" style="background:#646464"></div><div class="colorPickButton" hexvalue="#989898" style="background:#989898"></div><div class="colorPickButton" hexvalue="#CACACA" style="background:#CACACA"></div></div>
+		
+		<!-- SVG container -->
+		<div id="container"></div>
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-md-6">
+      <div class="bottom_page_content_nav">
+      <ul>
+                <li><div><a href="#" onclick="(function(){zoomIn+=.1;svg.attrs({height:(height*(zoomIn<1?1:zoomIn))});endSimulation();reDrawGraph();})();"><span class="fa-stack fa-lg pull-left"><i class="fa fa-search-plus fa-stack-1x "></i></span>Zoom-in</a></div></li>
+                <li><div><a href="#" onclick="(function(){zoomIn-=.1;(zoomIn<.5)&&(zoomIn=.5);svg.attrs({height:(height*(zoomIn<1?1:zoomIn))});endSimulation();reDrawGraph();})();"><span class="fa-stack fa-lg pull-left"><i class="fa fa-search-minus fa-stack-1x "></i></span>Zoom-out</a></div></li>
+                <li>
+                    <div class="well">Interaction strength: <b>0</b> <input id="sliderBio" type="text" class="span2" value="" data-slider-min="0" data-slider-max="1" data-slider-step=".005" data-slider-value="[0.8,1]"/> <b>1</b>
+                   <!--  <b class="white_">&nbsp;&nbsp;&nbsp;&nbsp;0</b> <input id="sliderBio" type="text" class="span2" value="" data-slider-min="0" data-slider-max="1" data-slider-step=".005" data-slider-value="[0.8,1]"/> <b class="white_">&nbsp;&nbsp;&nbsp;1</b> --></div>
+               </li>
+        <li>
+        <div class="dropup ">
+         <button class="btn btn-primary dropdown-toggle" type="button" id="uploadexample" data-toggle="dropdown" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Exporting..">
+         <span class="glyphicon glyphicon-export"></span>Export</button>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+
+            
+              <li role="presentation" style='display:block'>
+                  <a role='menuitem' tabindex="-1" href="#" onclick="(function(){simulation.stop();saveSvgAsPng(document.getElementById('SVGgraph'), 'figure.png', {scale: 5, backgroundColor: 'white'})})();"><span class="fa-stack fa-lg pull-left"><i class="fa fa-picture-o fa-stack-1x "></i></span>Image (*.png)</a>
+              </li>
+
+              <li role="presentation" style='display:block'><a role='menuitem' tabindex="-1" href="#" onclick="(function(){ExportData(data);})();"><span class="fa-stack fa-lg pull-left"><i class="fa fa-file-excel-o fa-stack-1x "></i></span>Data (*.csv)</a></li>
+           
+          </ul>
+        </div>
+
+        </li> 
+               
+         <li>
+           <button type="button" class="btn btn-primary" onclick="(function(){initialDraw=!0;reDrawGraph();})();">
+       <span class="glyphicon glyphicon-refresh"></span>Redraw
+      </button>
+         </li>
+    </ul>
+        </div>
+        
+        </div>
+         <div class="col-md-3"></div>  
+      </div>
+    </div>
+  
+{% endblock %}
+ 
+
+{% block footer %}{% endblock footer %}
+
+{% block js-foot %} 
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.min.js"></script>
+  <script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.1/js/bootstrap-colorpicker.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/t/dt/dt-1.10.11/datatables.min.js"></script>
+  <script  src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" /></script>
+  <script src="/static/js/network.js"></script>
+  <script src="/static/js/saveSvgAsPng.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/bootstrap-slider.min.js"></script>
+
+
+    <script type="text/javascript">
+    // global Variables
+  // var save = setInterval(saveSession, 10000);
+  var data = {{data|safe}};
+  var id = '{{id}}';
+  {% if restoreSession|length > 0 %}
+    var restoreSession = {{restoreSession|safe}};
+  {% else %}
+  var restoreSession = "";
+  {% endif %}
+  </script>
+
+{% endblock js-foot %} 

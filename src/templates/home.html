@@ -1,0 +1,224 @@
+
+{% extends "base.html" %}
+ {% load staticfiles %}
+{% block head_css %}
+<link href="{% static 'css/carousel.css' %}" rel="stylesheet">
+
+{% endblock %}
+{% block head_javascript %}
+
+{% endblock %}
+{% block content %}
+
+
+<div class="container marketing">
+
+      <div class="row featurette">
+        <div class="col-md-12">
+         <!--  <h2 class="featurette-heading">About <span class="text-muted">It'll blow your mind.</span></h2> -->
+        <p class="lead text-justify">
+           <b>Drug Target Profiler</b> is an interactive web-application for compound-target interaction network visualization. </p>
+        </div>
+      </div>
+          <hr class="featurette-divider">
+<div class="panel panel-default">
+   <div class="panel-heading">
+    <h1>Search compounds/proteins</h1>
+  </div>
+  <div class="panel-body">
+ <form action="/networks/network"  method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+   <div class="row">
+
+    <div class="col-md-12 text-right"><span class=" text-right example_small"><a href="#" class="string_example example_small" onclick="document.getElementById(&quot;multiple_identifiers&quot;).value=&quot;gefitinib, abl1, sunitinib, adra1a&quot;;return false;">Search example</a></span> </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-sm-12">
+          <textarea  id="multiple_identifiers" placeholder="Enter list of Compounds/Targets (e.g Gefitinib, sunitinib, Ly-294002)"name="search_terms" class="form-control queryInput uploadListsTextarea sequence-textarea hint"></textarea>
+    </div>
+  </div>
+    <div class="form-group row">
+    <div class="col-sm-2">
+              <div  class="upload"><strong>OR</strong> upload your own file:</div>
+     </div> 
+      <div class="col-sm-2 ">           
+              <input style='display:inline' class="" id="id_data_file" name="data_file" title="" type="file">  
+      </div>
+       <div class="col-sm-8 pull-left">        
+              <span class=" text-right example_small"><a href="/static/example/upload_data_template.xlsx" download class="string_example example_small">Download template file</a></span>
+        </div> 
+   
+  </div>
+
+  <div class="form-group row">
+    <div class="col-sm-12 text-center">
+      <button type="submit" class="btn btn-primary btn-lg">
+       Search
+    </button>
+    </div>
+  </div>
+</form>
+  </div>
+</div>
+<div class='row'>
+        <div class='col-md-1'></div>
+       <div class='col-md-5'>
+        <div id="chart1"  style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+
+       </div>
+       <div class='col-md-5'>
+        <div id="chart2" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+
+       </div> 
+        <div class='col-md-1'></div>
+    </div> 
+</div> 
+    
+    
+    <!-- /.carousel -->
+
+
+    <!-- Marketing messaging and featurettes
+    ================================================== -->
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+    
+
+    </div><!-- /.container -->
+
+{% endblock content %}
+{% block footer %} 
+    <footer class="footer">
+      <div class="container text-center">
+         <img ID="ImageFooter"  width="80%"  src="{% static 'img/footer.png' %}" />
+      </div>
+    </footer>
+
+{% endblock footer %}
+
+{% block js-foot %}
+<script type="text/javascript">
+    
+ $(document).ready(function() {
+    Highcharts.chart('chart1', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: ' Protein classification'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.y}</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                style: {
+                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                }
+            }
+        }
+    },
+    series: [{
+        name: 'protiens',
+        colorByPoint: true,
+        data: [{
+            name: 'Epigenetic regulator',
+            y: 118
+        }, {
+            name: 'GPCR',
+            y: 744,
+            sliced: true,
+            selected: true
+        }, {
+            name: 'Enzyme',
+            y: 3029
+        }, {
+            name: 'Ion channel',
+            y: 301
+        }, {
+            name: 'Kinase',
+            y: 541
+        }, {
+            name: 'Nuclear receptor',
+            y: 151
+        }, {
+            name: 'Other',
+            y: 1331
+        }, {
+            name: 'Transporter',
+            y: 216
+        }]
+    }]
+});
+Highcharts.chart('chart2', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Compound distribution into clinical phases'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.y}</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                style: {
+                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                }
+            }
+        }
+    },
+    series: [{
+        name: 'compounds',
+        colorByPoint: true,
+        data: [{
+            name: 'Phase I',
+            y: 144
+        }, {
+            name: 'Phase II',
+            y: 318,
+            sliced: true,
+            selected: true
+        }, {
+            name: 'Phase III',
+            y: 443
+        }, {
+            name: 'Aproved',
+            y: 1884
+        }]
+    }]
+});  
+
+
+
+ });
+
+
+</script>
+
+<script type="text/javascript">
+ 
+// document.getElementsByTagName("body")[0].style = "height:95% !important"
+
+</script>
+<!-- <script src="https://code.highcharts.com/highcharts.js"></script> -->
+<script src="static/js/HighChartsMin.js"></script>
+
+{% endblock js-foot %} 
+
